@@ -324,7 +324,7 @@
           - backup_plan_create_result.changed is true
           - backup_plan_create_result.backup_plan_name == backup_plan_name
           - backup_plan_create_result.backup_plan.rules != []
-          - "backup_plan_create_result.backup_plan.rules | selectattr('schedule_expression_timezone', 'match', 'Etc/UTC') | list"
+          - backup_plan_create_result.backup_plan.rules | selectattr('schedule_expression_timezone', 'match', 'Etc/UTC') | list
 
     - name: Create a backup plan using specific botocore version (idempotency)
       amazon.aws.backup_plan:

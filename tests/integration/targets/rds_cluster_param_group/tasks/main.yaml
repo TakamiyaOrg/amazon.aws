@@ -22,7 +22,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
       check_mode: true
       register: create_checkmode
 
@@ -42,7 +42,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
       register: create_group
 
     - name: Describe RDS parameter group
@@ -64,7 +64,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
       register: create_idempotency
 
     - name: Validate that module did not report change
@@ -77,7 +77,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         tags: "{{ resource_tags }}"
       register: create_tag
       check_mode: true
@@ -98,7 +98,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         tags: "{{ resource_tags }}"
       register: create_tag
 
@@ -118,7 +118,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         tags: "{{ resource_tags }}"
       register: create_tag_idempotency
 
@@ -138,7 +138,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         parameters:
           - parameter_name: archive_library
             parameter_value: test
@@ -157,7 +157,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         parameters:
           - parameter_name: invalid_fake
             parameter_value: test
@@ -176,7 +176,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         parameters:
           - parameter_name: array_nulls
             parameter_value: "0"
@@ -202,13 +202,14 @@
           - "'parameter_value' not in auth_timeout_param"
       vars:
         array_nulls_param: "{{ initial_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'array_nulls') | first }}"
-        auth_timeout_param: "{{ initial_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'authentication_timeout') | first }}"
+        auth_timeout_param: "{{ initial_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'authentication_timeout') | first
+          }}"
 
     - name: Modify RDS cluster parameter group with new parameters
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         parameters:
           - parameter_name: array_nulls
             parameter_value: "0"
@@ -228,15 +229,17 @@
       ansible.builtin.assert:
         that:
           - update_parameters is changed
-          - cluster_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'array_nulls') | first | community.general.json_query('parameter_value') == "0"
-          - cluster_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'authentication_timeout') | first | community.general.json_query('parameter_value') == "50"
+          - cluster_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'array_nulls') | first | community.general.json_query('parameter_value')
+            == "0"
+          - cluster_params.db_cluster_parameter_groups.0.db_parameters | selectattr('parameter_name', 'equalto', 'authentication_timeout') | first | community.general.json_query('parameter_value')
+            == "50"
 
     # Test Modify parameters (idempotency)
     - name: Modify RDS cluster parameter group with new parameters (idempotency with check_mode)
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         parameters:
           - parameter_name: array_nulls
             parameter_value: "0"
@@ -255,7 +258,7 @@
       amazon.aws.rds_cluster_param_group:
         name: "{{ rds_cluster_param_group_name }}"
         db_parameter_group_family: "{{ dbparam_group_family }}"
-        description: "RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}"
+        description: RDS cluster param group for Engine {{ engine_versions.db_engine_versions.0.engine_version }}
         parameters:
           - parameter_name: array_nulls
             parameter_value: "0"
@@ -284,7 +287,7 @@
       register: cluster_params
 
     - name: Validate that module execution reported change but the RDS cluster param group was not deleted
-      assert:
+      ansible.builtin.assert:
         that:
           - delete_cluster_param_checkmode is changed
           - cluster_params.db_cluster_parameter_groups | length == 1
