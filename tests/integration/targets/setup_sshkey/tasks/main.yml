@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
-- name: create a temp dir
+- name: Create a temp dir
   ansible.builtin.tempfile:
     state: directory
   register: sshkey_dir
   tags:
     - prepare
 
-- name: ensure script is available
+- name: Ensure script is available
   ansible.builtin.copy:
     src: ec2-fingerprint.py
     dest: "{{ sshkey_dir.path }}/ec2-fingerprint.py"
@@ -38,29 +38,29 @@
     sshkey_pub: "{{ sshkey_dir.path }}/key_one.pub"
     another_sshkey_pub: "{{ sshkey_dir.path }}/key_two.pub"
 
-- name: generate sshkey
+- name: Generate sshkey
   ansible.builtin.shell: echo 'y' | ssh-keygen -P '' -f '{{ sshkey }}'
   tags:
     - prepare
 
-- name: record fingerprint
-  ansible.builtin.shell: "{{ sshkey_dir.path }}/ec2-fingerprint.py {{ sshkey_pub }}"
+- name: Record fingerprint
+  ansible.builtin.command: "{{ sshkey_dir.path }}/ec2-fingerprint.py {{ sshkey_pub }}"
   register: fingerprint
   tags:
     - prepare
 
-- name: generate another_sshkey
+- name: Generate another_sshkey
   ansible.builtin.shell: echo 'y' | ssh-keygen -P '' -f {{ another_sshkey }}
   tags:
     - prepare
 
-- name: record another fingerprint
-  ansible.builtin.shell: "{{ sshkey_dir.path }}/ec2-fingerprint.py {{ another_sshkey_pub }}"
+- name: Record another fingerprint
+  ansible.builtin.command: "{{ sshkey_dir.path }}/ec2-fingerprint.py {{ another_sshkey_pub }}"
   register: another_fingerprint
   tags:
     - prepare
 
-- name: set facts for future roles
+- name: Set facts for future roles
   ansible.builtin.set_fact:
     # Public SSH keys (OpenSSH format)
     key_material: "{{ lookup('file', sshkey_pub) }}"

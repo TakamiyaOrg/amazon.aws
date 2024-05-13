@@ -1,5 +1,5 @@
 ---
-- name: rds_instance / modify integration tests
+- name: Rds_instance / modify integration tests
   collections:
     - community.aws
   module_defaults:
@@ -304,14 +304,14 @@
           - result is not changed
           - result is not failed
           - db_info.instances[0].ca_certificate_identifier == "rds-ca-ecc384-g1"
-  # Test modifying CA certificate identifier Complete-------------------------------------------
+    # Test modifying CA certificate identifier Complete-------------------------------------------
 
-  # Test modifying cloudwatch log exports -------------------------------------------
+    # Test modifying cloudwatch log exports -------------------------------------------
     - name: Enable all cloudwatch log exports - check_mode
       amazon.aws.rds_instance:
         state: present
         db_instance_identifier: "{{ modified_instance_id }}"
-        enable_cloudwatch_logs_exports: ["audit", "error", "general", "slowquery"]
+        enable_cloudwatch_logs_exports: [audit, error, general, slowquery]
       register: result
       check_mode: true
       vars:
@@ -332,7 +332,7 @@
       amazon.aws.rds_instance:
         state: present
         db_instance_identifier: "{{ modified_instance_id }}"
-        enable_cloudwatch_logs_exports: ["audit", "error", "general", "slowquery"]
+        enable_cloudwatch_logs_exports: [audit, error, general, slowquery]
       register: result
       vars:
         ansible_python_interpreter: "{{ botocore_virtualenv_interpreter }}"
@@ -359,7 +359,7 @@
       amazon.aws.rds_instance:
         state: present
         db_instance_identifier: "{{ modified_instance_id }}"
-        enable_cloudwatch_logs_exports: ["audit", "error", "general", "slowquery"]
+        enable_cloudwatch_logs_exports: [audit, error, general, slowquery]
       register: result
       vars:
         ansible_python_interpreter: "{{ botocore_virtualenv_interpreter }}"
@@ -380,7 +380,7 @@
       amazon.aws.rds_instance:
         state: present
         db_instance_identifier: "{{ modified_instance_id }}"
-        enable_cloudwatch_logs_exports: ["audit", "error"]
+        enable_cloudwatch_logs_exports: [audit, error]
       register: result
       check_mode: true
       vars:
@@ -401,7 +401,7 @@
       amazon.aws.rds_instance:
         state: present
         db_instance_identifier: "{{ modified_instance_id }}"
-        enable_cloudwatch_logs_exports: ["audit", "error"]
+        enable_cloudwatch_logs_exports: [audit, error]
       register: result
       vars:
         ansible_python_interpreter: "{{ botocore_virtualenv_interpreter }}"

@@ -94,7 +94,7 @@
         state: absent
         terminate_instances: true
 
-    - name: wait for instance to terminate
+    - name: Wait for instance to terminate
       ansible.builtin.pause:
         seconds: 60
 

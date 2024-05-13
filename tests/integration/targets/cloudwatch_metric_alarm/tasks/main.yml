@@ -1,5 +1,5 @@
 ---
-- name: run cloudwatch_metric_alarm tests
+- name: Run cloudwatch_metric_alarm tests
   module_defaults:
     group/aws:
       access_key: "{{ aws_access_key }}"
@@ -10,9 +10,9 @@
     - ansible.builtin.set_fact:
         alarm_full_name: "{{ alarm_prefix }}-{{ resource_prefix }}-cpu-low"
 
-    - name: set up environment for testing.
+    - name: Set up environment for testing.
       ansible.builtin.include_tasks: env_setup.yml
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -30,12 +30,12 @@
         wait: true
       register: ec2_instance_results
 
-    - name: ensure alarm doesn't exist for a clean test
+    - name: Ensure alarm doesn't exist for a clean test
       amazon.aws.cloudwatch_metric_alarm:
         state: absent
         name: "{{ alarm_full_name }}"
 
-    - name: create ec2 metric alarm on ec2 instance (check mode)
+    - name: Create ec2 metric alarm on ec2 instance (check mode)
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -54,20 +54,20 @@
       check_mode: true
       register: ec2_instance_metric_alarm_check
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
       register: alarm_info_check
 
-    - name: verify that an alarm was not created in check mode
+    - name: Verify that an alarm was not created in check mode
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm_check.changed
           - not ec2_instance_metric_alarm_check.alarm_arn
           - alarm_info_check.metric_alarms | length == 0
 
-    - name: create ec2 metric alarm on ec2 instance
+    - name: Create ec2 metric alarm on ec2 instance
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -85,13 +85,13 @@
         description: This will alarm when an instance's cpu usage average is lower than 5% for 15 minutes
       register: ec2_instance_metric_alarm
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
       register: alarm_info
 
-    - name: verify that an alarm was created
+    - name: Verify that an alarm was created
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm.changed
@@ -108,7 +108,7 @@
           - ec2_instance_metric_alarm.description == alarm_info.metric_alarms[0].alarm_description
           - ec2_instance_metric_alarm.treat_missing_data == alarm_info.metric_alarms[0].treat_missing_data
 
-    - name: create ec2 metric alarm on ec2 instance (idempotent) (check mode)
+    - name: Create ec2 metric alarm on ec2 instance (idempotent) (check mode)
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -127,7 +127,7 @@
       check_mode: true
       register: ec2_instance_metric_alarm_idempotent_check
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -156,7 +156,7 @@
         - alarm_description
         - treat_missing_data
 
-    - name: create ec2 metric alarm on ec2 instance (idempotent)
+    - name: Create ec2 metric alarm on ec2 instance (idempotent)
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -174,7 +174,7 @@
         description: This will alarm when an instance's cpu usage average is lower than 5% for 15 minutes
       register: ec2_instance_metric_alarm_idempotent
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -203,7 +203,7 @@
         - alarm_description
         - treat_missing_data
 
-    - name: update alarm (check mode)
+    - name: Update alarm (check mode)
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -221,12 +221,12 @@
       check_mode: true
       register: ec2_instance_metric_alarm_update_check
 
-    - name: verify that alarm registers as updated in check mode
+    - name: Verify that alarm registers as updated in check mode
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm_check.changed
 
-    - name: verify that properties were not changed in check mode
+    - name: Verify that properties were not changed in check mode
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm_update_check.changed
@@ -243,7 +243,7 @@
           - ec2_instance_metric_alarm_update_check.evaluation_periods == alarm_info.metric_alarms[0].evaluation_periods
           - ec2_instance_metric_alarm_update_check.treat_missing_data == alarm_info.metric_alarms[0].treat_missing_data
 
-    - name: update alarm
+    - name: Update alarm
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -260,12 +260,12 @@
         description: This will alarm when an instance's cpu usage average is lower than 5% for 3 minutes
       register: ec2_instance_metric_alarm_update
 
-    - name: verify that alarm registers as updated
+    - name: Verify that alarm registers as updated
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm.changed
 
-    - name: verify that properties were changed
+    - name: Verify that properties were changed
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm_update.changed
@@ -282,7 +282,7 @@
           - ec2_instance_metric_alarm_update.evaluation_periods == alarm_info.metric_alarms[0].evaluation_periods
           - ec2_instance_metric_alarm_update.treat_missing_data == alarm_info.metric_alarms[0].treat_missing_data
 
-    - name: try to remove the alarm (check mode)
+    - name: Try to remove the alarm (check mode)
       amazon.aws.cloudwatch_metric_alarm:
         state: absent
         name: "{{ alarm_full_name }}"
@@ -294,7 +294,7 @@
         that:
           - ec2_instance_metric_alarm_deletion_check.changed
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -305,7 +305,7 @@
         that:
           - alarm_info.metric_alarms | length > 0
 
-    - name: try to remove the alarm
+    - name: Try to remove the alarm
       amazon.aws.cloudwatch_metric_alarm:
         state: absent
         name: "{{ alarm_full_name }}"
@@ -316,7 +316,7 @@
         that:
           - ec2_instance_metric_alarm_deletion.changed
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -327,7 +327,7 @@
         that:
           - alarm_info.metric_alarms | length == 0
 
-    - name: create ec2 metric alarm with no unit on ec2 instance
+    - name: Create ec2 metric alarm with no unit on ec2 instance
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -344,13 +344,13 @@
         description: This will alarm when an instance's cpu usage average is lower than 5% for 15 minutes
       register: ec2_instance_metric_alarm_no_unit
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
       register: alarm_info_no_unit
 
-    - name: verify that an alarm was created
+    - name: Verify that an alarm was created
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm_no_unit.changed
@@ -367,7 +367,7 @@
           - ec2_instance_metric_alarm_no_unit.description == alarm_info_no_unit.metric_alarms[0].alarm_description
           - ec2_instance_metric_alarm_no_unit.treat_missing_data == alarm_info_no_unit.metric_alarms[0].treat_missing_data
 
-    - name: try to remove the alarm
+    - name: Try to remove the alarm
       amazon.aws.cloudwatch_metric_alarm:
         state: absent
         name: "{{ alarm_full_name }}"
@@ -378,7 +378,7 @@
         that:
           - ec2_instance_metric_alarm_deletion.changed
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -389,7 +389,7 @@
         that:
           - alarm_info.metric_alarms | length == 0
 
-    - name: create ec2 metric alarm with metrics
+    - name: Create ec2 metric alarm with metrics
       amazon.aws.cloudwatch_metric_alarm:
         state: present
         name: "{{ alarm_full_name }}"
@@ -413,13 +413,13 @@
             return_data: true
       register: ec2_instance_metric_alarm_metrics
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
       register: alarm_info_metrics
 
-    - name: verify that an alarm was created
+    - name: Verify that an alarm was created
       ansible.builtin.assert:
         that:
           - ec2_instance_metric_alarm_metrics.changed
@@ -434,7 +434,7 @@
           - ec2_instance_metric_alarm_metrics.metrics[0].metric_stat.unit == alarm_info_metrics.metric_alarms[0].metrics[0].metric_stat.unit
           - ec2_instance_metric_alarm_metrics.metrics[0].return_data == alarm_info_metrics.metric_alarms[0].metrics[0].return_data
 
-    - name: try to remove the alarm
+    - name: Try to remove the alarm
       amazon.aws.cloudwatch_metric_alarm:
         state: absent
         name: "{{ alarm_full_name }}"
@@ -445,7 +445,7 @@
         that:
           - ec2_instance_metric_alarm_deletion_no_unit.changed
 
-    - name: get info on alarms
+    - name: Get info on alarms
       amazon.aws.cloudwatch_metric_alarm_info:
         alarm_names:
           - "{{ alarm_full_name }}"
@@ -456,7 +456,7 @@
         that:
           - alarm_info_no_unit.metric_alarms | length == 0
 
-    - name: create ec2 metric alarm by providing mutually exclusive values
+    - name: Create ec2 metric alarm by providing mutually exclusive values
       amazon.aws.cloudwatch_metric_alarm:
         dimensions:
           InstanceId: "{{ ec2_instance_results.instances[0].instance_id }}"
@@ -493,13 +493,13 @@
           - '"parameters are mutually exclusive" in ec2_instance_metric_mutually_exclusive.msg'
 
   always:
-    - name: try to delete the alarm
+    - name: Try to delete the alarm
       amazon.aws.cloudwatch_metric_alarm:
         state: absent
         name: "{{ alarm_full_name }}"
       ignore_errors: true
 
-    - name: try to stop the ec2 instance
+    - name: Try to stop the ec2 instance
       amazon.aws.ec2_instance:
         instance_ids: "{{ ec2_instance_results.instances[0].instance_id }}"
         state: terminated
