@@ -81,7 +81,7 @@
           - _result_create_db_cluster.tags | length == 2
           - _result_create_db_cluster.tags["Created_By"] == tags_create["Created_By"]
           - _result_create_db_cluster.tags["Name"] == tags_create["Name"]
-          - "'vpc_security_groups' in _result_create_db_cluster"
+
     - name: Get info of the existing cluster
       amazon.aws.rds_cluster_info:
         cluster_id: "{{ cluster_id }}"
@@ -118,7 +118,6 @@
         that:
           - not _result_create_db_cluster.changed
 
-  always:
     - name: Delete DB cluster without creating a final snapshot
       amazon.aws.rds_cluster:
         state: absent

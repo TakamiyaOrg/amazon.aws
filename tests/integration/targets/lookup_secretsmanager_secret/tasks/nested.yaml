@@ -53,7 +53,6 @@
           - missing_wrn_secret == []
 
   always:
-    # delete secret created
     - name: Delete secret '{{ json_secret_name }}'
       community.aws.secretsmanager_secret:
         name: "{{ json_secret_name }}"

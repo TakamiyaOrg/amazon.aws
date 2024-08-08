@@ -110,10 +110,8 @@
         that:
           - get_deleted_secret is failed
 
-    # Test with nested secrets
     - ansible.builtin.include_tasks: tasks/nested.yaml
   always:
-  # delete secret created
     - name: Delete secret
       community.aws.secretsmanager_secret:
         name: "{{ secret_name }}"

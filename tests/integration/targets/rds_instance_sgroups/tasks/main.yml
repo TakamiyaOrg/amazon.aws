@@ -57,8 +57,6 @@
           - not result.changed
       ignore_errors: true
 
-    # ------------------------------------------------------------------------------------------
-
     - name: Create a DB instance in the VPC with two security groups - check_mode
       amazon.aws.rds_instance:
         id: "{{ instance_id }}"
@@ -137,8 +135,6 @@
           - result.db_instance_identifier == instance_id
           - result.vpc_security_groups | selectattr('status', 'in', ['active', 'adding']) | list | length == 2
 
-    # ------------------------------------------------------------------------------------------
-
     - name: Add a new security group without purge - check_mode
       amazon.aws.rds_instance:
         id: "{{ instance_id }}"
@@ -203,8 +199,6 @@
           - result.db_instance_identifier == instance_id
           - result.vpc_security_groups | selectattr('status', 'in', ['active', 'adding']) | list | length == 3
 
-    # ------------------------------------------------------------------------------------------
-
     - name: Add a security group with purge - check_mode
       amazon.aws.rds_instance:
         id: "{{ instance_id }}"
@@ -264,7 +258,6 @@
           - result.db_instance_identifier == instance_id
           - result.vpc_security_groups | selectattr('status', 'in', ['active', 'adding']) | list | length == 1
 
-  always:
     - name: Ensure the resource doesn't exist
       amazon.aws.rds_instance:
         id: "{{ instance_id }}"

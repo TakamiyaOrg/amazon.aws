@@ -170,9 +170,9 @@
           - "'tags' in _result_restored_db_cluster"
           - "'vpc_security_groups' in _result_restored_db_cluster"
 
-  # TODO: export a snapshot to an S3 bucket and restore cluster from it
-  # Requires rds_export_task module
-  always:
+    # TODO: export a snapshot to an S3 bucket and restore cluster from it
+    # Requires rds_export_task module
+
     - name: Delete the snapshot
       amazon.aws.rds_cluster_snapshot:
         db_cluster_snapshot_identifier: "{{ cluster_id }}-snapshot"

@@ -63,7 +63,6 @@
         that:
           - _result_create_source_db_cluster.changed
 
-  always:
     - name: Delete DB cluster without creating a final snapshot
       amazon.aws.rds_cluster:
         state: absent

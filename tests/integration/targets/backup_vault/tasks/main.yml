@@ -244,7 +244,6 @@
           - updated_tags_idempotency_info.backup_vaults[0].backup_vault_name == updated_tags_info.backup_vaults[0].backup_vault_name
           - updated_tags_idempotency_info.backup_vaults[0].tags == updated_tags_info.backup_vaults[0].tags
 
-  always:
     - name: Delete AWS Backup Vault created during this test
       amazon.aws.backup_vault:
         backup_vault_name: "{{ backup_vault_name }}"

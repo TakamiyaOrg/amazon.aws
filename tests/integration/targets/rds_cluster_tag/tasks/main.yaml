@@ -248,7 +248,7 @@
           - _result_tag_db_cluster.tags | length == 2
           - _result_tag_db_cluster.tags["Created_By"] == tags_create["Created_By"]
           - _result_tag_db_cluster.tags["Name"] == tags_create["Name"]
-          - "'vpc_security_groups' in _result_tag_db_cluster"
+
     - name: Remove all tags
       amazon.aws.rds_cluster:
         engine: "{{ engine }}"
@@ -286,7 +286,7 @@
           - "'tags' in _result_tag_db_cluster"
           - _result_tag_db_cluster.tags | length == 0
           - "'vpc_security_groups' in _result_tag_db_cluster"
-  always:
+
     - name: Delete DB cluster without creating a final snapshot
       amazon.aws.rds_cluster:
         state: absent

@@ -344,7 +344,6 @@
           - backup_plan_create_result.exists is true
           - backup_plan_create_result.changed is false
 
-  always:
     - name: Delete AWS Backup plan created during this test
       amazon.aws.backup_plan:
         backup_plan_name: "{{ backup_plan_name }}"

@@ -8,6 +8,7 @@
   block:
     # ------------------------------------------------------------------------------------------
     # Create DB cluster
+
     - name: Ensure the resource doesn't exist
       amazon.aws.rds_cluster:
         id: "{{ cluster_id }}"
@@ -58,8 +59,6 @@
           - "'tags' in _result_create_source_db_cluster"
           - "'vpc_security_groups' in _result_create_source_db_cluster"
 
-    # ------------------------------------------------------------------------------------------
-    # Test stopping db clusters
     - name: Stop db clusters - checkmode
       amazon.aws.rds_cluster:
         cluster_id: "{{ cluster_id }}"
@@ -110,8 +109,6 @@
         that:
           - not stopped_cluster_idem.changed
 
-    # ------------------------------------------------------------------------------------------
-    # Test starting DB clusters
     - name: Start db clusters - checkmode
       amazon.aws.rds_cluster:
         cluster_id: "{{ cluster_id }}"
@@ -154,8 +151,6 @@
         that:
           - not started_cluster.changed
 
-    # ------------------------------------------------------------------------------------------
-    # Give errors for MySql DB cluster
     - name: Ensure the resource doesn't exist
       amazon.aws.rds_cluster:
         id: "{{ mysql_cluster_id }}"
@@ -223,8 +218,6 @@
           - mysql_cluster.msg == "Only aurora clusters can use the state stopped"
 
   always:
-    # ------------------------------------------------------------------------------------------
-    # Cleanup starts here
     - name: Delete MySql db cluster without creating a final snapshot
       amazon.aws.rds_cluster:
         state: absent

@@ -10,7 +10,6 @@
   block:
     # ============================================================
     # Describe state of remaining resources
-
     - name: (VPC Cleanup) Find all remaining ENIs
       amazon.aws.ec2_eni_info:
         filters:
@@ -57,15 +56,14 @@
     # Delete all remaining SGs
 
     # Cross-dependencies between rules in the SGs can cause us problems if we don't clear the rules
-    # first
+
     - name: (VPC Cleanup) Delete rules from remaining SGs
       amazon.aws.ec2_security_group:
         name: "{{ item.group_name }}"
         group_id: "{{ item.group_id }}"
         description: "{{ item.description }}"
-        rules: []
-        rules_egress: []
-      loop: "{{ remaining_groups.security_groups }}"
+        rules: "{{ remaining_groups.security_groups }}"
+        rules_egress: "{{ remaining_groups.security_groups }}"
       ignore_errors: true
 
     - name: (VPC Cleanup) Delete remaining SGs

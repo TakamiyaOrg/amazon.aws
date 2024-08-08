@@ -14,7 +14,6 @@
 
   tasks:
   # ============================================================
-
     - name: Terminate the instance
       amazon.aws.ec2_instance:
         state: absent
