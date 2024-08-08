@@ -28,14 +28,13 @@
           session_token: "{{ security_token | default(omit) }}"
 
     - ansible.builtin.include_role:
-        name: ../setup_sshkey
+
     - ansible.builtin.include_role:
         name: ../setup_ec2_facts
 
     - ansible.builtin.set_fact:
         availability_zone: "{{ ec2_availability_zone_names[0] }}"
 
-    # ============================================================
     - name: Create a VPC
       amazon.aws.ec2_vpc_net:
         name: "{{ resource_prefix }}-vpc"

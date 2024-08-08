@@ -482,7 +482,6 @@
           - _result_instance_snapshot.tags["Tag Two"] == "two "+snapshot_id +"-b"
           - _result_instance_snapshot.tags["tag_three"] == snapshot_id+"-b Three"
 
-  always:
     - name: Delete the existing DB instance snapshots
       amazon.aws.rds_instance_snapshot:
         state: absent

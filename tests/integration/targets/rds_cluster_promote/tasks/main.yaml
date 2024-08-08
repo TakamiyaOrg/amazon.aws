@@ -174,7 +174,6 @@
         that:
           - not _result_promote_replica_db_cluster.changed
 
-  always:
     - name: Remove the DB cluster
       amazon.aws.rds_cluster:
         id: "{{ cluster_id }}"

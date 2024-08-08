@@ -98,7 +98,6 @@
           - "'Modify database endpoint port number for the DB Cluster using the ModifyDbCluster API' in result.msg"
           - "'Please see rds_cluster' in result.msg"
 
-  always:
     - name: Delete the instance
       amazon.aws.rds_instance:
         id: "{{ item }}"

@@ -6,9 +6,10 @@
     #
     # Get some information about who we are before starting our tests
     # we'll need this as soon as we start working on the policies
+
     - name: Get ARN of calling user
       amazon.aws.aws_caller_info:
-      register: aws_caller_info
+
     - name: Create a key
       amazon.aws.kms_key:
         alias: "{{ kms_key_alias }}"
@@ -17,7 +18,7 @@
         state: present
         enabled: true
         enable_key_rotation: false
-      register: key
+
     - name: Assert that state is enabled
       ansible.builtin.assert:
         that:
@@ -40,8 +41,6 @@
           - key.key_policies[0].Id == 'key-default-1'
           - key.description == ''
 
-    # ------------------------------------------------------------------------------------------
-
     - name: Tag encryption key
       amazon.aws.kms_key:
         alias: "{{ kms_key_alias }}"
@@ -50,7 +49,7 @@
           tag_one: tag_one
           tag_two: tag_two
         purge_tags: false
-      register: key
+
     - name: Assert tags added
       ansible.builtin.assert:
         that:
@@ -77,7 +76,7 @@
 
     - name: Sleep to wait for updates to propagate
       ansible.builtin.wait_for:
-        timeout: 45
+
     - name: Modify tags - check mode
       amazon.aws.kms_key:
         alias: "{{ kms_key_alias }}"
@@ -87,7 +86,7 @@
           tag_two: tag_two_updated
           Tag Three: "{{ resource_prefix }}"
       register: key
-      check_mode: true
+
     - name: Assert that change is expected
       ansible.builtin.assert:
         that:
@@ -101,7 +100,7 @@
         tags:
           tag_two: tag_two_updated
           Tag Three: "{{ resource_prefix }}"
-      register: key
+
     - name: Assert tags correctly changed
       ansible.builtin.assert:
         that:
@@ -130,7 +129,7 @@
 
     - name: Sleep to wait for updates to propagate
       ansible.builtin.wait_for:
-        timeout: 45
+
     - name: Modify tags (idempotence) - check mode
       amazon.aws.kms_key:
         alias: "{{ kms_key_alias }}"
@@ -140,7 +139,7 @@
           tag_two: tag_two_updated
           Tag Three: "{{ resource_prefix }}"
       register: key
-      check_mode: true
+
     - name: Assert that no change is expected
       ansible.builtin.assert:
         that:
@@ -154,7 +153,7 @@
         tags:
           tag_two: tag_two_updated
           Tag Three: "{{ resource_prefix }}"
-      register: key
+
     - name: Assert that no change occurred
       ansible.builtin.assert:
         that:
@@ -183,7 +182,7 @@
 
   always:
     # ============================================================
-    #   CLEAN-UP
+
     - name: Finish off by deleting keys
       amazon.aws.kms_key:
         state: absent

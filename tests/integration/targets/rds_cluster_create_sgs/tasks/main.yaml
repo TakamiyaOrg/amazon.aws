@@ -174,7 +174,6 @@
           - _result_create_db_cluster.db_cluster_identifier == cluster_id
           - _result_create_db_cluster.vpc_security_groups | selectattr('status', 'in', ['active', 'adding']) | list | length == 1
 
-  always:
     - name: Delete DB cluster without creating a final snapshot
       amazon.aws.rds_cluster:
         state: absent

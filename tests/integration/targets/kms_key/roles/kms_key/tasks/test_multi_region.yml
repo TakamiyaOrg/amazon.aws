@@ -6,12 +6,13 @@
     #
     # Get some information about who we are before starting our tests
     # we'll need this as soon as we start working on the policies
+
     - name: Get ARN of calling user
       amazon.aws.aws_caller_info:
-      register: aws_caller_info
+
     - name: See whether key exists and its current state
       amazon.aws.kms_key_info:
-        alias: "{{ kms_key_alias }}"
+
     - name: Create a multi region key - check mode
       amazon.aws.kms_key:
         alias: "{{ kms_key_alias }}-check"
@@ -21,11 +22,11 @@
         multi_region: true
         enabled: true
       register: key_check
-      check_mode: true
+
     - name: Find facts about the check mode key
       amazon.aws.kms_key_info:
         alias: "{{ kms_key_alias }}-check"
-      register: check_key
+
     - name: Ensure that check mode worked as expected
       ansible.builtin.assert:
         that:
@@ -41,7 +42,7 @@
         enabled: true
         multi_region: true
         enable_key_rotation: false
-      register: key
+
     - name: Assert that state is enabled
       ansible.builtin.assert:
         that:
@@ -90,7 +91,7 @@
 
   always:
     # ============================================================
-    #   CLEAN-UP
+
     - name: Finish off by deleting keys
       amazon.aws.kms_key:
         state: absent

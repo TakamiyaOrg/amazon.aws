@@ -24,21 +24,16 @@
     - name: (Cleanup) Remove Instances (start)
       amazon.aws.ec2_instance:
         state: absent
-        instance_ids: "{{ item.instance_id }}"
+        instance_ids: "{{ instances.instances }}"
         wait: false
       ignore_errors: true
-      loop: "{{ instances.instances }}"
 
     - name: (Cleanup) Remove Instances (wait for completion)
       amazon.aws.ec2_instance:
         state: absent
-        instance_ids: "{{ item.instance_id }}"
+        instance_ids: "{{ instances.instances }}"
         filters:
-          instance-state-name: [pending, running, shutting-down, stopping, stopped]
-          vpc-id: "{{ testing_vpc.vpc.id }}"
-        wait: true
-      ignore_errors: true
-      loop: "{{ instances.instances }}"
+          instance-state-name:
 
     - name: (Cleanup) Find all remaining ENIs
       amazon.aws.ec2_eni_info:
@@ -68,9 +63,8 @@
         name: "{{ item.group_name }}"
         description: "{{ item.description }}"
         vpc_id: "{{ testing_vpc.vpc.id }}"
-        rules: []
-        egress_rules: []
-      loop: "{{ security_groups.security_groups }}"
+        rules: "{{ security_groups.security_groups }}"
+        egress_rules: "{{ security_groups.security_groups }}"
       register: sg_removed
       until: sg_removed is not failed
       ignore_errors: true

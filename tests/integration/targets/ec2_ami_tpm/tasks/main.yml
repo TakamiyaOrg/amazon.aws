@@ -12,6 +12,7 @@
     # ============================================================
 
     # SETUP: vpc, ec2 key pair, subnet, security group, ec2 instance, snapshot
+
     - name: Create a VPC to work in
       amazon.aws.ec2_vpc_net:
         cidr_block: "{{ vpc_cidr }}"
@@ -120,8 +121,6 @@
 
   always:
     # ============================================================
-
-    # TEAR DOWN: snapshot, ec2 instance, ec2 key pair, security group, vpc
     - name: Announce teardown start
       ansible.builtin.debug:
         msg: "***** TESTING COMPLETE. COMMENCE TEARDOWN *****"

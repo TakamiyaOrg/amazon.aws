@@ -384,8 +384,7 @@
 
     # ------------------------------------------------------------------------------------------
     # Test copying a snapshot
-    ### Copying a DB cluster snapshot from a different region is supported, but not in CI,
-    ### because the aws-terminator only terminates resources in one region.
+
     - ansible.builtin.set_fact:
         _snapshot_arn: "{{ _result_cluster_snapshot.db_cluster_snapshot_arn }}"
 
@@ -455,7 +454,6 @@
           - _result_cluster_copy_snapshot.tags["Tag Two"] == "two "+snapshot_id+"-b"
           - _result_cluster_copy_snapshot.tags["tag_three"] == snapshot_id+"-b Three"
 
-  always:
     - name: Delete the existing DB cluster snapshots
       amazon.aws.rds_cluster_snapshot:
         state: absent
